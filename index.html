@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F6F3EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141A16" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta name="format-detection" content="telephone=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Find Your Table</title>
+<meta name="description" content="Find your table on our wedding ballroom seating plan.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Find Your Table">
+<meta property="og:description" content="Enter your table number to see where you'll be seated.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F3EC;
+    --surface:#FFFFFF;
+    --room:#FBF9F4;
+    --ink:#1E2A22;
+    --ink-2:#5E665B;
+    --ink-3:#959A8E;
+    --green:#2F4A3A;
+    --green-hover:#243A2D;
+    --sage:#DCE3D5;
+    --sage-line:#B7C3AE;
+    --champagne:#C2A574;
+    --champagne-soft:#EFE5D1;
+    --line:#E7E1D4;
+    --line-strong:#D8D0BF;
+    --on-green:#F6F3EC;
+    --shadow:0 1px 2px rgba(30,42,34,.04), 0 12px 32px -12px rgba(30,42,34,.14);
+    --ease:cubic-bezier(.22,.61,.16,1);
+    --serif:'Instrument Serif', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --sans:'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#141A16; --surface:#1B231D; --room:#18201A;
+      --ink:#EEEAE0; --ink-2:#B3B6AA; --ink-3:#7F8577;
+      --green:#8FB09A; --green-hover:#A3C2AD;
+      --sage:#26322A; --sage-line:#3E4D42;
+      --champagne:#D2B784; --champagne-soft:#3A3326;
+      --line:#2A342C; --line-strong:#36423A; --on-green:#141A16;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 32px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#141A16; --surface:#1B231D; --room:#18201A;
+    --ink:#EEEAE0; --ink-2:#B3B6AA; --ink-3:#7F8577;
+    --green:#8FB09A; --green-hover:#A3C2AD;
+    --sage:#26322A; --sage-line:#3E4D42;
+    --champagne:#D2B784; --champagne-soft:#3A3326;
+    --line:#2A342C; --line-strong:#36423A; --on-green:#141A16;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 32px -12px rgba(0,0,0,.5);
+  }
+
+  *,*::before,*::after{box-sizing:border-box;}
+  [hidden]{display:none !important;}
+  :root{
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  html{
+    -webkit-text-size-adjust:100%;
+    scroll-padding-top:env(safe-area-inset-top,0px);
+    background:var(--bg);
+  }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  button{font:inherit; color:inherit; touch-action:manipulation;}
+  .noscript{margin:0 0 20px; padding:14px 18px; border-radius:16px; background:var(--surface); border:1px solid var(--line); color:var(--ink-2); font-size:.9rem;}
+
+  .leaf{
+    position:absolute;
+    top:-30px; right:-60px;
+    width:260px; height:260px;
+    color:var(--green);
+    opacity:.07;
+    pointer-events:none;
+  }
+
+  .page{
+    position:relative;
+    max-width:520px;
+    margin:0 auto;
+    padding:40px 16px 48px;
+    overflow:hidden;
+  }
+
+  /* Hero */
+  .hero{padding:0 4px; margin-bottom:28px; position:relative;}
+  .hero h1{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(2.75rem, 12vw, 3.5rem);
+    line-height:.95;
+    letter-spacing:-0.015em;
+    margin:0 0 14px;
+  }
+  .hero p{
+    margin:0;
+    max-width:30ch;
+    color:var(--ink-2);
+    font-weight:300;
+    font-size:1rem;
+  }
+
+  /* Search */
+  .search{margin-bottom:20px;}
+  .field-label{
+    display:block;
+    font-size:.8125rem;
+    font-weight:500;
+    color:var(--ink-2);
+    margin:0 0 8px 4px;
+  }
+  .search-bar{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:6px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:999px;
+    box-shadow:var(--shadow);
+    transition:border-color .2s ease, box-shadow .2s ease;
+  }
+  .search-bar:focus-within{
+    border-color:var(--champagne);
+    box-shadow:var(--shadow), 0 0 0 4px rgba(194,165,116,.2);
+    box-shadow:var(--shadow), 0 0 0 4px color-mix(in srgb, var(--champagne) 20%, transparent);
+  }
+  .search-bar input{
+    flex:1; min-width:0;
+    height:48px;
+    border:0; outline:0;
+    background:transparent;
+    padding:0 8px 0 16px;
+    font-family:var(--sans);
+    font-size:1.0625rem;
+    color:var(--ink);
+  }
+  .search-bar input::placeholder{color:var(--ink-3);}
+  .find-btn{
+    height:48px;
+    padding:0 22px;
+    border:0;
+    border-radius:999px;
+    background:var(--green);
+    color:var(--on-green);
+    font-weight:500;
+    font-size:.9375rem;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:background .2s ease, transform .15s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .find-btn:hover{background:var(--green-hover);}
+  .find-btn:active{transform:scale(.97);}
+  .find-btn:focus-visible{outline:2px solid var(--champagne); outline-offset:2px;}
+  @media (max-width:359px){
+    .search-bar{flex-direction:column; align-items:stretch; border-radius:24px;}
+    .find-btn{width:100%;}
+  }
+  .error{
+    margin:12px 4px 0;
+    font-size:.9rem;
+    color:#A5543A;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .error{color:#E0937A;} }
+
+  /* Result */
+  .result{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:18px;
+    box-shadow:var(--shadow);
+    margin-bottom:20px;
+  }
+  .result-main{display:flex; align-items:center; gap:16px;}
+  .badge{
+    flex-shrink:0;
+    width:68px; height:68px;
+    border-radius:50%;
+    background:var(--green);
+    color:var(--on-green);
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    box-shadow:0 0 0 4px var(--surface), 0 0 0 5px var(--champagne);
+  }
+  .badge .n{font-family:var(--serif); font-size:2.1rem; line-height:1;}
+  .badge .tag{font-size:.625rem; font-weight:600; letter-spacing:.14em; margin-bottom:1px;}
+  .badge.vip{background:var(--champagne); color:#1E2A22;}
+  .badge.vip .n{font-size:1.75rem;}
+  .result-title{margin:0 0 2px; font-weight:500; font-size:1.0625rem;}
+  .result-hint{margin:0; color:var(--ink-2); font-size:.9rem; font-weight:300;}
+  .another-btn{
+    width:100%;
+    margin-top:16px;
+    height:48px;
+    border-radius:999px;
+    border:1px solid var(--line-strong);
+    background:transparent;
+    color:var(--ink);
+    font-weight:500;
+    font-size:.9375rem;
+    cursor:pointer;
+    transition:background .2s ease, border-color .2s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .another-btn:hover{background:var(--bg); border-color:var(--champagne);}
+  .another-btn:focus-visible{outline:2px solid var(--champagne); outline-offset:2px;}
+
+  /* Plan */
+  .plan-bar{
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:8px;
+    margin:0 4px 12px;
+  }
+  .plan-bar h2{
+    margin:0;
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:1.625rem;
+    line-height:1;
+  }
+  .controls{display:flex; gap:6px; align-items:center;}
+  .icon-btn, .pill-btn{
+    height:40px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--ink);
+    border-radius:999px;
+    cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+    transition:border-color .2s ease, opacity .2s ease, transform .15s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .icon-btn{width:40px; padding:0;}
+  .pill-btn{padding:0 14px 0 12px; gap:7px; font-size:.8125rem; font-weight:500;}
+  .icon-btn:hover:not(:disabled), .pill-btn:hover:not(:disabled){border-color:var(--champagne);}
+  .icon-btn:active:not(:disabled), .pill-btn:active:not(:disabled){transform:scale(.95);}
+  .icon-btn:disabled, .pill-btn:disabled{opacity:.4; cursor:default;}
+  .icon-btn:focus-visible, .pill-btn:focus-visible{outline:2px solid var(--champagne); outline-offset:2px;}
+  .icon-btn svg, .pill-btn svg{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round;}
+  .pill-btn svg{color:var(--champagne);}
+
+  .map-frame{
+    position:relative;
+    border-radius:24px;
+    overflow:hidden;
+    background:var(--room);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  #floorplan{display:block; width:100%; height:auto; touch-action:pan-y; user-select:none; -webkit-user-select:none;}
+  .map-frame.is-zoomed #floorplan{cursor:grab;}
+  .map-frame.is-dragging #floorplan{cursor:grabbing;}
+  #viewport{transform-origin:0 0;}
+  #viewport.animate{transition:transform .8s var(--ease);}
+
+  /* SVG styling */
+  .room{fill:var(--room);}
+  .dot{fill:var(--line-strong); opacity:.55;}
+  .led{fill:var(--green);}
+  .led-text{fill:var(--on-green); font-family:var(--sans); font-size:17px; font-weight:500; letter-spacing:.08em; text-anchor:middle; dominant-baseline:central;}
+  .stage{fill:var(--champagne-soft); stroke:var(--champagne); stroke-width:1.5;}
+  .stage-text{fill:var(--ink-2); font-family:var(--serif); font-style:italic; font-size:40px; text-anchor:middle; dominant-baseline:central;}
+  .steps{stroke:var(--champagne); stroke-width:2; stroke-linecap:round;}
+  .av{fill:var(--surface); stroke:var(--line-strong); stroke-width:1.5;}
+  .av-text{fill:var(--ink-3); font-family:var(--sans); font-size:13px; letter-spacing:.06em; text-anchor:middle; dominant-baseline:central;}
+  .pillar{fill:var(--ink-3); opacity:.55;}
+  .entry{fill:var(--green);}
+  .entry-text{fill:var(--on-green); font-family:var(--sans); font-size:16px; font-weight:500; letter-spacing:.04em; text-anchor:middle; dominant-baseline:central;}
+
+  .table{cursor:pointer; transition:opacity .5s ease; outline:none;}
+  .table .disc{fill:var(--surface); stroke:var(--sage-line); stroke-width:1.5; transition:fill .4s ease, stroke .4s ease;}
+  .table .chair{fill:var(--sage); transition:fill .4s ease;}
+  .table .num{font-family:var(--serif); font-size:36px; fill:var(--ink); text-anchor:middle; dominant-baseline:central; pointer-events:none; transition:fill .4s ease;}
+  .table .vip-tag{font-family:var(--sans); font-size:12px; font-weight:600; letter-spacing:.16em; fill:var(--ink-2); text-anchor:middle; dominant-baseline:central; pointer-events:none;}
+  .table.is-vip .disc{fill:var(--champagne-soft); stroke:var(--champagne);}
+  .table.is-vip .chair{fill:var(--champagne); opacity:.6;}
+  @supports (color: color-mix(in srgb, red 50%, blue)){ .table.is-vip .chair{opacity:1;} }
+  .table.is-vip .chair{fill:color-mix(in srgb, var(--champagne) 45%, var(--room));}
+  .table.is-vip .num{font-size:32px;}
+  .table:focus-visible .disc{stroke:var(--champagne); stroke-width:4;}
+  .table .halo{fill:none; stroke:var(--champagne); stroke-width:3; opacity:0; transform-box:fill-box; transform-origin:center;}
+
+  .table.dimmed{opacity:.28;}
+  .table.selected .disc{fill:var(--green); stroke:var(--green);}
+  .table.selected .num{fill:var(--on-green);}
+  .table.selected .vip-tag{fill:var(--on-green); opacity:.8;}
+  .table.selected .chair{fill:var(--champagne);}
+  .table.selected .halo{animation:halo 2.4s ease-out infinite;}
+  @keyframes halo{
+    0%{opacity:.75; transform:scale(1);}
+    100%{opacity:0; transform:scale(1.5);}
+  }
+
+  /* Overlays */
+  .your-label{
+    position:absolute; left:0; top:0;
+    transform:translate(-50%,-100%);
+    background:var(--green);
+    color:var(--on-green);
+    font-size:.6875rem; font-weight:600; letter-spacing:.14em;
+    padding:7px 12px;
+    border-radius:999px;
+    white-space:nowrap;
+    pointer-events:none;
+    opacity:0;
+    box-shadow:0 6px 16px -6px rgba(30,42,34,.4);
+    transition:opacity .3s ease;
+    z-index:3;
+  }
+  .your-label::after{
+    content:""; position:absolute; left:50%; top:100%;
+    transform:translateX(-50%);
+    border:5px solid transparent; border-top-color:var(--green);
+  }
+  .your-label.below{transform:translate(-50%,0);}
+  .your-label.below::after{top:auto; bottom:100%; border-top-color:transparent; border-bottom-color:var(--green);}
+  .your-label.show{opacity:1;}
+  .your-label.animate{transition:left .8s var(--ease), top .8s var(--ease), opacity .3s ease;}
+
+  .orient{
+    position:absolute; left:50%;
+    transform:translateX(-50%);
+    display:inline-flex; align-items:center; gap:5px;
+    padding:5px 11px;
+    border-radius:999px;
+    background:var(--surface);
+    background:color-mix(in srgb, var(--surface) 88%, transparent);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    border:1px solid var(--line);
+    font-size:.75rem; font-weight:500; color:var(--ink-2);
+    pointer-events:none;
+    opacity:0;
+    transition:opacity .4s ease;
+    z-index:2;
+  }
+  .orient svg{width:12px; height:12px; stroke:var(--champagne); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+  .orient-top{top:10px;}
+  .orient-bottom{bottom:10px;}
+  .map-frame.is-zoomed .orient{opacity:1;}
+
+  .legend{
+    list-style:none; margin:14px 4px 0; padding:0;
+    display:flex; flex-wrap:wrap; gap:6px 18px;
+    font-size:.8125rem; color:var(--ink-2);
+  }
+  .legend li{display:inline-flex; align-items:center; gap:7px;}
+  .sw{width:12px; height:12px; border-radius:50%; border:1.5px solid var(--sage-line); background:var(--surface);}
+  .sw.vip{background:var(--champagne-soft); border-color:var(--champagne);}
+  .sw.you{background:var(--green); border-color:var(--green);}
+  .tip{margin:8px 4px 0; font-size:.8125rem; color:var(--ink-3);}
+
+  @media (prefers-reduced-motion: reduce){
+    #viewport.animate, .your-label.animate{transition:none;}
+    .table.selected .halo{animation:none; opacity:.6; transform:scale(1.18);}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <svg class="leaf" viewBox="0 0 200 200" aria-hidden="true">
+    <path fill="currentColor" d="M170 20C95 22 38 70 30 150c-2 18 0 30 0 30s12 2 30 0C140 172 188 115 170 20Z"/>
+    <path fill="none" stroke="var(--bg)" stroke-width="3" d="M40 170C80 120 120 70 160 32M72 132l-18-34M100 100l-6-40M100 100l38 4M72 132l40 10"/>
+  </svg>
+
+  <header class="hero">
+    <h1>Find Your Table</h1>
+    <p>Enter your table number to see where you'll be seated.</p>
+  </header>
+
+  <noscript><p class="noscript">Please enable JavaScript to use the interactive seating plan.</p></noscript>
+
+  <form class="search" id="searchForm" novalidate>
+    <label class="field-label" for="tableInput">Table number</label>
+    <div class="search-bar">
+      <input id="tableInput" type="text" inputmode="text" enterkeyhint="search"
+             autocomplete="off" autocapitalize="characters" spellcheck="false"
+             placeholder="e.g. 12 or VIP 1" aria-describedby="errorMsg">
+      <button class="find-btn" type="submit">Find My Table</button>
+    </div>
+    <p class="error" id="errorMsg" role="alert" hidden></p>
+  </form>
+
+  <section class="result" id="result" hidden aria-live="polite">
+    <div class="result-main">
+      <div class="badge" id="badge"></div>
+      <div>
+        <p class="result-title" id="resultTitle"></p>
+        <p class="result-hint" id="resultHint"></p>
+      </div>
+    </div>
+    <button class="another-btn" id="anotherBtn" type="button">Find Another Table</button>
+  </section>
+
+  <section class="plan" aria-labelledby="planTitle">
+    <div class="plan-bar">
+      <h2 id="planTitle">Ballroom</h2>
+      <div class="controls">
+        <button class="icon-btn" id="zoomOutBtn" type="button" aria-label="Zoom out">
+          <svg viewBox="0 0 16 16"><path d="M3 8h10"/></svg>
+        </button>
+        <button class="icon-btn" id="zoomInBtn" type="button" aria-label="Zoom in">
+          <svg viewBox="0 0 16 16"><path d="M3 8h10M8 3v10"/></svg>
+        </button>
+        <button class="pill-btn" id="toggleBtn" type="button">
+          <svg viewBox="0 0 16 16" id="toggleIcon"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg>
+          <span id="toggleLabel">Whole plan</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="map-frame" id="mapFrame">
+      <svg id="floorplan" viewBox="0 0 1200 1320" role="img" aria-label="Ballroom floor plan with the stage at the top and the entrance at the bottom">
+        <defs>
+          <pattern id="dots" width="32" height="32" patternUnits="userSpaceOnUse">
+            <circle class="dot" cx="16" cy="16" r="1.5"></circle>
+          </pattern>
+        </defs>
+        <g id="viewport">
+          <rect class="room" x="24" y="64" width="1152" height="1222" rx="32"></rect>
+          <rect x="24" y="64" width="1152" height="1222" rx="32" fill="url(#dots)"></rect>
+
+          <rect class="led" x="110" y="92" width="980" height="42" rx="21"></rect>
+          <text class="led-text" x="600" y="113">LED PANEL</text>
+
+          <path class="stage" d="M282,152 H918 Q938,152 938,172 V236 Q938,250 924,250 H806 V346 Q806,362 790,362 H420 Q404,362 404,346 V250 H276 Q262,250 262,236 V172 Q262,152 282,152 Z"></path>
+          <text class="stage-text" x="600" y="262">Stage</text>
+          <path class="steps" d="M584,374 H616 M584,384 H616 M584,394 H616 M370,290 V322 M380,290 V322 M390,290 V322 M820,290 V322 M830,290 V322 M840,290 V322"></path>
+
+          <rect class="av" x="46" y="236" width="56" height="116" rx="12"></rect>
+          <text class="av-text" x="74" y="294" transform="rotate(-90 74 294)">AV CONSOLE</text>
+
+          <circle class="pillar" cx="96" cy="430" r="16"></circle>
+          <circle class="pillar" cx="1080" cy="424" r="16"></circle>
+          <circle class="pillar" cx="92" cy="905" r="16"></circle>
+          <circle class="pillar" cx="1080" cy="905" r="16"></circle>
+
+          <rect class="entry" x="250" y="1266" width="200" height="40" rx="20"></rect>
+          <text class="entry-text" x="350" y="1286">ENTRANCE</text>
+          <rect class="entry" x="740" y="1266" width="200" height="40" rx="20"></rect>
+          <text class="entry-text" x="840" y="1286">ENTRANCE</text>
+
+          <g id="tablesLayer"></g>
+        </g>
+      </svg>
+
+      <div class="orient orient-top" aria-hidden="true">
+        <svg viewBox="0 0 12 12"><path d="M3 7.5 6 4.5l3 3"/></svg>Stage
+      </div>
+      <div class="orient orient-bottom" aria-hidden="true">
+        <svg viewBox="0 0 12 12"><path d="M3 4.5 6 7.5l3-3"/></svg>Entrance
+      </div>
+      <div class="your-label" id="yourLabel" aria-hidden="true">YOUR TABLE</div>
+    </div>
+
+    <ul class="legend">
+      <li><span class="sw"></span>Guest table</li>
+      <li><span class="sw vip"></span>VIP table</li>
+      <li><span class="sw you"></span>Your table</li>
+    </ul>
+    <p class="tip">Pinch or use + and − to zoom. Tap any table to select it.</p>
+  </section>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var NS = "http://www.w3.org/2000/svg";
+  var VB_W = 1200, VB_H = 1320;
+  var R = 44, CHAIR_RING = 63, CHAIRS = 10;
+  var FOCUS_S = 1.55, MAX_S = 3.2;
+
+  var TABLES = [
+    { id:"table-1",  n:"1",  cx:127,  cy:564 },
+    { id:"table-2",  n:"2",  cx:125,  cy:771 },
+    { id:"table-3",  n:"3",  cx:122,  cy:1013 },
+    { id:"table-5",  n:"5",  cx:307,  cy:1072 },
+    { id:"table-6",  n:"6",  cx:303,  cy:892 },
+    { id:"table-7",  n:"7",  cx:303,  cy:714 },
+    { id:"table-8",  n:"8",  cx:304,  cy:532 },
+    { id:"table-9",  n:"9",  cx:480,  cy:794 },
+    { id:"table-10", n:"10", cx:480,  cy:1012 },
+    { id:"table-11", n:"11", cx:724,  cy:1016 },
+    { id:"table-12", n:"12", cx:724,  cy:798 },
+    { id:"table-13", n:"13", cx:899,  cy:534 },
+    { id:"table-15", n:"15", cx:899,  cy:716 },
+    { id:"table-16", n:"16", cx:899,  cy:893 },
+    { id:"table-17", n:"17", cx:902,  cy:1074 },
+    { id:"table-18", n:"18", cx:1082, cy:1028 },
+    { id:"table-19", n:"19", cx:1082, cy:783 },
+    { id:"table-20", n:"20", cx:1082, cy:548 },
+    { id:"vip-1",    n:"1",  cx:477,  cy:573, vip:true },
+    { id:"vip-2",    n:"2",  cx:719,  cy:570, vip:true }
+  ];
+
+  function $(id){ return document.getElementById(id); }
+  function el(name, attrs){
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function nameOf(t){ return t.vip ? "VIP " + t.n : "Table " + t.n; }
+
+  var svg = $("floorplan"), viewport = $("viewport"), frame = $("mapFrame");
+  var layer = $("tablesLayer"), yourLabel = $("yourLabel");
+  var form = $("searchForm"), input = $("tableInput"), errorMsg = $("errorMsg");
+  var result = $("result"), badge = $("badge"), resultTitle = $("resultTitle"), resultHint = $("resultHint");
+  var anotherBtn = $("anotherBtn"), zoomInBtn = $("zoomInBtn"), zoomOutBtn = $("zoomOutBtn");
+  var toggleBtn = $("toggleBtn"), toggleLabel = $("toggleLabel"), toggleIcon = $("toggleIcon");
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- Build tables ---------- */
+  var byId = {};
+  TABLES.forEach(function(t){
+    var g = el("g", {
+      id: t.id,
+      "class": "table" + (t.vip ? " is-vip" : ""),
+      tabindex: "0",
+      role: "button",
+      "aria-label": nameOf(t)
+    });
+    g.appendChild(el("circle", { "class":"halo", cx:t.cx, cy:t.cy, r:R + 10 }));
+    for (var i = 0; i < CHAIRS; i++){
+      var a = (i / CHAIRS) * Math.PI * 2 - Math.PI / 2;
+      g.appendChild(el("circle", {
+        "class":"chair",
+        cx:(t.cx + CHAIR_RING * Math.cos(a)).toFixed(1),
+        cy:(t.cy + CHAIR_RING * Math.sin(a)).toFixed(1),
+        r:7.5
+      }));
+    }
+    g.appendChild(el("circle", { "class":"disc", cx:t.cx, cy:t.cy, r:R }));
+    if (t.vip){
+      var tag = el("text", { "class":"vip-tag", x:t.cx, y:t.cy - 15 });
+      tag.textContent = "VIP";
+      g.appendChild(tag);
+      var n1 = el("text", { "class":"num", x:t.cx, y:t.cy + 9 });
+      n1.textContent = t.n;
+      g.appendChild(n1);
+    } else {
+      var n2 = el("text", { "class":"num", x:t.cx, y:t.cy + 1 });
+      n2.textContent = t.n;
+      g.appendChild(n2);
+    }
+    layer.appendChild(g);
+    byId[t.id] = { el:g, t:t };
+  });
+
+  /* ---------- View state ---------- */
+  var state = { s:1, tx:0, ty:0 };
+  var selectedId = null;
+  var focused = false;
+
+  function clampState(){
+    state.s = Math.min(MAX_S, Math.max(1, state.s));
+    state.tx = Math.min(0, Math.max(VB_W - state.s * VB_W, state.tx));
+    state.ty = Math.min(0, Math.max(VB_H - state.s * VB_H, state.ty));
+  }
+  function pxPerUnit(){ return frame.clientWidth / VB_W; }
+
+  function render(animate){
+    clampState();
+    var anim = !!animate && !reduceMotion;
+    viewport.classList.toggle("animate", anim);
+    yourLabel.classList.toggle("animate", anim);
+    viewport.style.transform = "translate(" + state.tx + "px," + state.ty + "px) scale(" + state.s + ")";
+    var zoomed = state.s > 1.02;
+    frame.classList.toggle("is-zoomed", zoomed);
+    svg.style.touchAction = zoomed ? "none" : "pan-y";
+    zoomOutBtn.disabled = state.s <= 1.001;
+    zoomInBtn.disabled = state.s >= MAX_S - 0.001;
+    placeLabel();
+    updateToggle();
+  }
+
+  function placeLabel(){
+    if (!selectedId){ yourLabel.classList.remove("show"); return; }
+    var t = byId[selectedId].t, k = pxPerUnit();
+    var x = (state.s * t.cx + state.tx) * k;
+    var topY = (state.s * (t.cy - R - 26) + state.ty) * k;
+    var below = topY < 34;
+    var y = below ? (state.s * (t.cy + R + 26) + state.ty) * k : topY;
+    var visible = x > 0 && x < frame.clientWidth && y > 0 && y < frame.clientHeight;
+    yourLabel.classList.toggle("below", below);
+    yourLabel.style.left = x + "px";
+    yourLabel.style.top = y + "px";
+    yourLabel.classList.toggle("show", visible);
+  }
+
+  function updateToggle(){
+    var backToTable = selectedId && !focused;
+    toggleLabel.textContent = backToTable ? "My table" : "Whole plan";
+    toggleIcon.innerHTML = backToTable
+      ? '<circle cx="8" cy="8" r="5"/><circle cx="8" cy="8" r="1.5"/>'
+      : '<path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/>';
+    toggleBtn.disabled = !backToTable && state.s <= 1.001;
+  }
+
+  function focusSelected(){
+    var t = byId[selectedId].t;
+    state.s = FOCUS_S;
+    state.tx = VB_W / 2 - FOCUS_S * t.cx;
+    state.ty = VB_H / 2 - FOCUS_S * t.cy;
+    focused = true;
+    render(true);
+  }
+  function showWhole(){
+    state.s = 1; state.tx = 0; state.ty = 0;
+    focused = false;
+    render(true);
+  }
+  function zoomAt(factor, px, py, animate){
+    var ns = Math.min(MAX_S, Math.max(1, state.s * factor));
+    state.tx = px - (px - state.tx) * (ns / state.s);
+    state.ty = py - (py - state.ty) * (ns / state.s);
+    state.s = ns;
+    focused = false;
+    render(animate);
+  }
+
+  /* ---------- Selection ---------- */
+  function hintFor(t){
+    var left = t.cx < 600;
+    if (t.vip) return "In front of the stage, " + (left ? "left" : "right") + " of the centre aisle.";
+    var depth = t.cy < 620 ? "near the stage" : (t.cy < 920 ? "halfway back" : "near the entrance");
+    return (left ? "Left" : "Right") + " side of the ballroom, " + depth + ".";
+  }
+
+  function select(id){
+    var entry = byId[id];
+    if (!entry) return;
+    selectedId = id;
+    var t = entry.t;
+    Object.keys(byId).forEach(function(k){
+      byId[k].el.classList.toggle("selected", k === id);
+      byId[k].el.classList.toggle("dimmed", k !== id);
+    });
+
+    badge.className = "badge" + (t.vip ? " vip" : "");
+    badge.innerHTML = (t.vip ? '<span class="tag">VIP</span>' : "") + '<span class="n">' + t.n + "</span>";
+    resultTitle.textContent = nameOf(t) + " highlighted";
+    resultHint.textContent = hintFor(t);
+    form.hidden = true;
+    result.hidden = false;
+    errorMsg.hidden = true;
+
+    focusSelected();
+    setUrlTable(nameOf(t).replace("Table ", ""));
+
+    var r = frame.getBoundingClientRect();
+    if (r.top < 0 || r.bottom > window.innerHeight){
+      frame.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+    }
+  }
+
+  function setUrlTable(value){
+    try {
+      var url = window.location.pathname + (value ? "?table=" + encodeURIComponent(value) : "") + window.location.hash;
+      window.history.replaceState(null, "", url);
+    } catch(err){}
+  }
+
+  function clearSelection(){
+    selectedId = null;
+    focused = false;
+    Object.keys(byId).forEach(function(k){
+      byId[k].el.classList.remove("selected", "dimmed");
+    });
+  }
+
+  function parse(raw){
+    var v = (raw || "").trim().toUpperCase().replace(/^TABLE\s*/, "");
+    var m = v.match(/^VIP\s*-?\s*([12])$/);
+    if (m) return "vip-" + m[1];
+    if (/^\d{1,2}$/.test(v) && byId["table-" + parseInt(v, 10)]) return "table-" + parseInt(v, 10);
+    return null;
+  }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var id = parse(input.value);
+    if (id){
+      input.blur();
+      select(id);
+    } else {
+      clearSelection();
+      showWhole();
+      errorMsg.textContent = "We couldn\u2019t find that table. Please enter a table number from 1\u201320.";
+      errorMsg.hidden = false;
+    }
+  });
+
+  anotherBtn.addEventListener("click", function(){
+    clearSelection();
+    result.hidden = true;
+    form.hidden = false;
+    errorMsg.hidden = true;
+    input.value = "";
+    setUrlTable(null);
+    showWhole();
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    input.focus({ preventScroll: true });
+  });
+
+  zoomInBtn.addEventListener("click", function(){ zoomAt(1.4, VB_W / 2, VB_H / 2, true); });
+  zoomOutBtn.addEventListener("click", function(){ zoomAt(1 / 1.4, VB_W / 2, VB_H / 2, true); });
+  toggleBtn.addEventListener("click", function(){
+    if (selectedId && !focused) focusSelected(); else showWhole();
+  });
+
+  /* ---------- Touch & mouse gestures ---------- */
+  var pointers = new Map();
+  var gesture = null;
+  var suppressClick = false;
+
+  function toVB(x, y){
+    var r = svg.getBoundingClientRect(), k = r.width / VB_W;
+    return { x:(x - r.left) / k, y:(y - r.top) / k };
+  }
+  function startPan(p){
+    gesture = { type:"pan", x0:p.x, y0:p.y, tx0:state.tx, ty0:state.ty, captured:false };
+  }
+  function startPinch(){
+    var ps = Array.from(pointers.values());
+    var a = toVB(ps[0].x, ps[0].y), b = toVB(ps[1].x, ps[1].y);
+    gesture = {
+      type:"pinch",
+      d0: Math.hypot(a.x - b.x, a.y - b.y) || 1,
+      cx: ((a.x + b.x) / 2 - state.tx) / state.s,
+      cy: ((a.y + b.y) / 2 - state.ty) / state.s,
+      s0: state.s
+    };
+  }
+
+  svg.addEventListener("pointerdown", function(e){
+    pointers.set(e.pointerId, { x:e.clientX, y:e.clientY });
+    if (pointers.size === 1){ suppressClick = false; startPan(pointers.get(e.pointerId)); }
+    else if (pointers.size === 2){ startPinch(); suppressClick = true; }
+  });
+
+  svg.addEventListener("pointermove", function(e){
+    if (!pointers.has(e.pointerId) || !gesture) return;
+    pointers.set(e.pointerId, { x:e.clientX, y:e.clientY });
+
+    if (gesture.type === "pan" && pointers.size === 1){
+      var dx = e.clientX - gesture.x0, dy = e.clientY - gesture.y0;
+      if (Math.hypot(dx, dy) > 6) suppressClick = true;
+      if (state.s <= 1.02 || !suppressClick) return;
+      if (!gesture.captured){
+        try { svg.setPointerCapture(e.pointerId); } catch(err){}
+        gesture.captured = true;
+        frame.classList.add("is-dragging");
+      }
+      var k = pxPerUnit();
+      state.tx = gesture.tx0 + dx / k;
+      state.ty = gesture.ty0 + dy / k;
+      focused = false;
+      render(false);
+    } else if (gesture.type === "pinch" && pointers.size === 2){
+      var ps = Array.from(pointers.values());
+      var a = toVB(ps[0].x, ps[0].y), b = toVB(ps[1].x, ps[1].y);
+      var d = Math.hypot(a.x - b.x, a.y - b.y);
+      var ns = Math.min(MAX_S, Math.max(1, gesture.s0 * d / gesture.d0));
+      state.s = ns;
+      state.tx = (a.x + b.x) / 2 - gesture.cx * ns;
+      state.ty = (a.y + b.y) / 2 - gesture.cy * ns;
+      focused = false;
+      render(false);
+    }
+  });
+
+  function endPointer(e){
+    pointers.delete(e.pointerId);
+    frame.classList.remove("is-dragging");
+    if (pointers.size === 1){ startPan(Array.from(pointers.values())[0]); }
+    else if (pointers.size === 0){ gesture = null; }
+  }
+  svg.addEventListener("pointerup", endPointer);
+  svg.addEventListener("pointercancel", endPointer);
+
+  svg.addEventListener("wheel", function(e){
+    if (!e.ctrlKey) return;
+    e.preventDefault();
+    var p = toVB(e.clientX, e.clientY);
+    zoomAt(Math.exp(-e.deltaY * 0.01), p.x, p.y, false);
+  }, { passive:false });
+
+  Object.keys(byId).forEach(function(id){
+    var g = byId[id].el;
+    g.addEventListener("click", function(){
+      if (suppressClick) return;
+      input.value = nameOf(byId[id].t).replace("Table ", "");
+      select(id);
+    });
+    g.addEventListener("keydown", function(e){
+      if (e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        input.value = nameOf(byId[id].t).replace("Table ", "");
+        select(id);
+      }
+    });
+  });
+
+  var resizeRaf = 0;
+  window.addEventListener("resize", function(){
+    cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(function(){ render(false); });
+  });
+  window.addEventListener("pageshow", function(){ render(false); });
+  render(false);
+
+  // Restore a table from the link (e.g. ?table=12 or ?table=VIP%201)
+  try {
+    var initial = new URLSearchParams(window.location.search).get("table");
+    var initialId = parse(initial);
+    if (initialId){
+      input.value = initial;
+      select(initialId);
+    } else if (initial){
+      setUrlTable(null);
+    }
+  } catch(err){}
+})();
+</script>
+</body>
+</html>
